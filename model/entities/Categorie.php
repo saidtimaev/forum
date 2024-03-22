@@ -40,7 +40,7 @@ final class Categorie extends Entity{
     /**
      * Get the value of name
      */ 
-    public function getName(){
+    public function getNom(){
         return $this->nom;
     }
 
