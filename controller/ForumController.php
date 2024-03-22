@@ -42,4 +42,21 @@ class ForumController extends AbstractController implements ControllerInterface{
             ]
         ];
     }
+
+    public function listPostsByTopic($id) {
+
+        $postManager = new PostManager();
+        $topicManager = new TopicManager();
+        $topic = $topicManager->findOneById($id);
+        $posts = $postManager->findPostsByTopic($id);
+
+        return [
+            "view" => VIEW_DIR."forum/listPosts.php",
+            "meta_description" => "Liste des posts par topic : ".$topic,
+            "data" => [
+                "topic" => $topic,
+                "posts" => $posts
+            ]
+        ];
+    }
 }
