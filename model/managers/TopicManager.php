@@ -19,7 +19,7 @@ class TopicManager extends Manager{
 
         $sql = "SELECT * 
                 FROM ".$this->tableName." t 
-                WHERE t.category_id = :id";
+                WHERE t.categorie_id = :id";
        
         // la requête renvoie plusieurs enregistrements --> getMultipleResults
         return  $this->getMultipleResults(

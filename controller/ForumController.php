@@ -37,7 +37,7 @@ class ForumController extends AbstractController implements ControllerInterface{
             "view" => VIEW_DIR."forum/listTopics.php",
             "meta_description" => "Liste des topics par catégorie : ".$categorie,
             "data" => [
-                "category" => $categorie,
+                "categorie" => $categorie,
                 "topics" => $topics
             ]
         ];
