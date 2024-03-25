@@ -59,7 +59,7 @@ class TopicController extends AbstractController implements ControllerInterface{
         // var_dump($data); die;
     
         $topicManager = new TopicManager();
-        $topicManager
+        
         $topicManager->add($data);
 
         self::redirectTo("topic","listTopicsByCategory", $data["categorie_id"]);
