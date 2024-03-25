@@ -6,6 +6,7 @@ use App\AbstractController;
 use App\ControllerInterface;
 use Model\Managers\TopicManager;
 use Model\Managers\CategorieManager;
+use Model\Managers\PostManager;
 
 class TopicController extends AbstractController implements ControllerInterface{
 
@@ -49,7 +50,7 @@ class TopicController extends AbstractController implements ControllerInterface{
 
         foreach($_POST as $key => $value ){
 
-            if($key != "submit"){
+            if($key != "submit" && $key != "texte"){
                 $data[$key] = $value;
                 
             }
@@ -60,9 +61,21 @@ class TopicController extends AbstractController implements ControllerInterface{
     
         $topicManager = new TopicManager();
         
-        $topicManager->add($data);
+        $idNewTopic = $topicManager->add($data);
 
-        self::redirectTo("topic","listTopicsByCategory", $data["categorie_id"]);
+        $data = [];
+
+        $data['texte'] = $_POST['texte'];
+        $data['utilisateur_id'] = $_POST['utilisateur_id'];
+        $data['topic_id'] = $idNewTopic;
+
+        $postManager = new PostManager();
+        
+        $postManager->add($data);
+
+       
+
+        self::redirectTo("post","listPostsByTopic", $idNewTopic);
 
     }
 }

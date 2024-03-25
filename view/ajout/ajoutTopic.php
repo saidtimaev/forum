@@ -6,5 +6,9 @@
     <input type="text" name="titre" value="" placeholder="Entrez le nom du titre ici">
     <input type="hidden" name="categorie_id" value="<?= $id?>" > 
     <input type="text" name="utilisateur_id" value="1" >  
-    <input type="submit" name="submit" value="Créer">
+
+
+    <label for="texte">Message : </label>
+    <input type="text" name="texte" value="" placeholder="Entrez le message ici">
+    <input type="submit" name="submit" value="Publier">
 </form>
