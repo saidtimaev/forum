@@ -30,4 +30,39 @@ class TopicController extends AbstractController implements ControllerInterface{
         ];
     }
 
+    public function ajouterTopicAffichage() {
+
+
+        return [
+            "view" => VIEW_DIR."ajout/ajoutTopic.php",
+            "meta_description" => "Liste des topics par catégorie : ",
+            "data" => [
+                
+            ]
+        ];
+    }
+
+    public function ajouterTopic() {
+
+
+        $data = [];
+
+        foreach($_POST as $key => $value ){
+
+            if($key != "submit"){
+                $data[$key] = $value;
+                
+            }
+
+        }
+
+        // var_dump($data); die;
+    
+        $topicManager = new TopicManager();
+        $topicManager
+        $topicManager->add($data);
+
+        self::redirectTo("topic","listTopicsByCategory", $data["categorie_id"]);
+
+    }
 }

@@ -10,7 +10,8 @@ use Model\Managers\PostManager;
 class PostController extends AbstractController implements ControllerInterface{
 
     public function index() {
-        
+
+        self::redirectTo("categorie");
         
     }
 

@@ -7,7 +7,7 @@
 
 <?php
 foreach($topics as $topic ){ ?>
-    <p><a href="index.php?ctrl=post&action=listPostsByTopic&id=<?= $topic->getId() ?>"><?= $topic ?></a> par <?= $topic->getUtilisateur() ?></p>
+    <p><a href="index.php?ctrl=post&action=listPostsByTopics&id=<?= $topic->getId() ?>"><?= $topic ?></a> par <?= $topic->getUtilisateur() ?></p>
 <?php } ?>
 
-<a href="#">Nouveau topic</a>
+<a href="index.php?ctrl=topic&action=ajouterTopicAffichage">Nouveau topic</a>
