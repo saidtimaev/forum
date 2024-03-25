@@ -7,5 +7,5 @@
 
 <?php
 foreach($posts as $post ){ ?>
-    <p>"<?= $post ?>"</a> par <?= $post->getUtilisateur() ?></p>
+    <p>"<?= $post ?>" par <a href="#"><?= $post->getUtilisateur() ?></a> le <?= $post->getDateCreation() ?></p>
 <?php }

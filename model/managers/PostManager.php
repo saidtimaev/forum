@@ -19,7 +19,8 @@ class PostManager extends Manager{
 
         $sql = "SELECT * 
                 FROM ".$this->tableName." t 
-                WHERE t.topic_id = :id";
+                WHERE t.topic_id = :id
+                ORDER BY t.dateCreation ASC";
        
         // la requête renvoie plusieurs enregistrements --> getMultipleResults
         return  $this->getMultipleResults(
