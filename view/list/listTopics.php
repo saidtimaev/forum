@@ -1,6 +1,6 @@
 <?php
     $categorie = $result["data"]['categorie']; 
-    $topics = $result["data"]['topics']; 
+    $topics = $result["data"]['topics']??[]; 
     $id = $_GET["id"];
 ?>
 

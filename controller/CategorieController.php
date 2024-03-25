@@ -25,4 +25,42 @@ class CategorieController extends AbstractController implements ControllerInterf
         ];
     }
 
+
+    public function ajouterCategorieAffichage() {
+
+
+        return [
+            "view" => VIEW_DIR."ajout/ajoutCategorie.php",
+            "meta_description" => "Ajout de catégorie",
+            "data" => [
+                
+            ]
+        ];
+    }
+
+    public function ajouterCategorie() {
+
+
+        $data = [];
+
+        foreach($_POST as $key => $value ){
+
+            if($key != "submit"){
+                $data[$key] = $value;
+                
+            }
+
+        }
+
+        // var_dump($data); die;
+    
+        $categorieManager = new CategorieManager();
+        
+        $categorieManager->add($data);
+
+        self::redirectTo("categorie","index");
+
+    }
+
+
 }

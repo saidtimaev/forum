@@ -35,7 +35,7 @@ class TopicController extends AbstractController implements ControllerInterface{
 
         return [
             "view" => VIEW_DIR."ajout/ajoutTopic.php",
-            "meta_description" => "Liste des topics par catégorie : ",
+            "meta_description" => "Ajout de topic",
             "data" => [
                 
             ]
