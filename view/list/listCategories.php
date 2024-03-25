@@ -9,7 +9,7 @@ foreach($categories as $categorie ){ ?>
     <p><a href="index.php?ctrl=topic&action=listTopicsByCategory&id=<?= $categorie->getId() ?>"><?= $categorie->getNom() ?></a></p>
 <?php } ?>
 
-<a href="index.php?ctrl=categorie&action=ajouterCategorieAffichage&id=<?= $id?>">Nouvelle catégorie</a>
+<a href="index.php?ctrl=categorie&action=ajouterCategorieAffichage">Nouvelle catégorie</a>
 
 
   

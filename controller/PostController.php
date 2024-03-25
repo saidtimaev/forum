@@ -32,4 +32,31 @@ class PostController extends AbstractController implements ControllerInterface{
         ];
     }
 
+    
+    
+
+    public function ajouterPost() {
+
+
+        $data = [];
+
+        foreach($_POST as $key => $value ){
+
+            if($key != "submit"){
+                $data[$key] = $value;
+                
+            }
+
+        }
+
+        // var_dump($data); die;
+    
+        $postManager = new PostManager();
+        
+        $postManager->add($data);
+
+        self::redirectTo("post","listPostsByTopic",$data["topic_id"]);
+
+    }
+
 }
