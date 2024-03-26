@@ -22,12 +22,12 @@ class UtilisateurManager extends Manager{
                 ";
        
         // la requête renvoie plusieurs enregistrements --> getMultipleResults
-        return  $this->getMultipleResults(
+        return  $this->getOneOrNullResult(
             DAO::select($sql, [
                 'pseudonyme' => $pseudonyme,
                 'email' => $email,
 
-            ]), 
+            ],false), 
             $this->className
         );
     }
