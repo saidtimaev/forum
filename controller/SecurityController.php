@@ -8,25 +8,43 @@ use Model\Managers\UtilisateurManager;
 class SecurityController extends AbstractController{
     // contiendra les méthodes liées à l'authentification : register, login et logout
 
-    public function register () {
+    public function register() {
 
-        $pseudonyme = filter_input(INPUT_POST, "pseudonyme", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL);
-        $password1 = filter_input(INPUT_POST, "password1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $password2 = filter_input(INPUT_POST, "password2", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        // var_dump($_POST);
 
         $managerUtilisateur = new UtilisateurManager();
-        $users = $managerUtilisateur->;
         
         if(isset($_POST["submit"])) {
 
+            $pseudonyme = filter_input(INPUT_POST, "pseudonyme", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL);
+            $password1 = filter_input(INPUT_POST, "password1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $password2 = filter_input(INPUT_POST, "password2", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            // var_dump("test");
+
+            $data = [
+                "pseudonyme" => $pseudonyme,
+                "mail" => $email,
+                "motDePasse" => password_hash($password1,PASSWORD_DEFAULT)
+            ];
+
+            $users = $managerUtilisateur->findUtilisateur($pseudonyme, $email);
+
+
             if($users){
 
-                self::redirectTo("security","register");
+                var_dump("L'utilisateur existe déjà!");
 
             } else {
 
+                if($password1 == $password2){
 
+                    $managerUtilisateur->add($data);
+                } else {
+
+                    var_dump("Les mots de passe ne sont pas identiques!");
+                }
 
             }
             

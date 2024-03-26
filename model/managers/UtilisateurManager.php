@@ -13,4 +13,22 @@ class UtilisateurManager extends Manager{
     public function __construct(){
         parent::connect();
     }
+
+
+    public function findUtilisateur($pseudonyme, $email){
+        $sql = "SELECT * 
+                FROM ".$this->tableName." t 
+                WHERE t.pseudonyme = :pseudonyme OR t.mail = :email
+                ";
+       
+        // la requête renvoie plusieurs enregistrements --> getMultipleResults
+        return  $this->getMultipleResults(
+            DAO::select($sql, [
+                'pseudonyme' => $pseudonyme,
+                'email' => $email,
+
+            ]), 
+            $this->className
+        );
+    }
 }
