@@ -26,7 +26,8 @@ class SecurityController extends AbstractController{
             $data = [
                 "pseudonyme" => $pseudonyme,
                 "mail" => $email,
-                "motDePasse" => password_hash($password1,PASSWORD_DEFAULT)
+                "motDePasse" => password_hash($password1,PASSWORD_DEFAULT),
+                "role"=> "ROLE_USER"
             ];
 
             $users = $managerUtilisateur->findUtilisateur($pseudonyme, $email);
@@ -90,11 +91,13 @@ class SecurityController extends AbstractController{
                     $_SESSION["user"] = $user;
                     // var_dump($_SESSION);
                 } else {
-                    var_dump("password_verify retourne FALSE");
+                    self::redirectTo("security","login");
+                    // Message flash "Mot de passe incorrect, veuillez renouveler votre saisie"
                 }
 
             } else {
-                var_dump("Utilisateur inconnu ");
+                self::redirectTo("security","login");
+                // Message flash "utilisateur n'existe pas, créez un compte"
             }
             
         }
@@ -116,5 +119,16 @@ class SecurityController extends AbstractController{
         var_dump($_SESSION);
         self::redirectTo("home","index");
 
+    }
+
+    public function profile(){
+
+        return [
+            "view" => VIEW_DIR."profil.php",
+            "meta_description" => "Profil",
+            "data" => [ 
+               
+            ]
+            ];
     }
 }

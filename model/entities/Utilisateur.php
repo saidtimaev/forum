@@ -13,7 +13,7 @@ final class Utilisateur extends Entity{
     private $mail;
     private $role;
     private $pseudonyme;
-    private $dateInscription;
+    private \DateTime $dateInscription;
     private $motDePasse;
     
     public function __construct($data){         
@@ -58,9 +58,9 @@ final class Utilisateur extends Entity{
      *
      * @return  self
      */ 
-    public function setDateInscription($dateInscription)
+    public function setDateInscription(string $dateInscription)
     {
-        $this->dateInscription = $dateInscription;
+        $this->dateInscription = new \DateTime($dateInscription);
 
         return $this;
     }
@@ -88,7 +88,7 @@ final class Utilisateur extends Entity{
     /**
      * Get the value of role
      */ 
-    public function hasRole()
+    public function getRole()
     {
         return $this->role;
     }
@@ -143,6 +143,11 @@ final class Utilisateur extends Entity{
         $this->id = $id;
 
         return $this;
+    }
+
+    public function hasRole($role)
+    {
+        return ($this->role == $role);
     }
 
     public function __toString() {
