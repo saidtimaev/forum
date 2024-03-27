@@ -19,7 +19,7 @@
                 <header>
                     <nav>
                         <div id="nav-left">
-                            <a href="/">Accueil</a>
+                            <a href="index.php?ctrl=home&action=index">Accueil</a>
                             <?php
                             if(App\Session::isAdmin()){
                                 ?>
@@ -28,7 +28,7 @@
                         </div>
                         <div id="nav-right">
                         <?php
-                            // si l'utilisateur est connecté 
+                            // si l'utilisateur est connecté    
                             if(App\Session::getUser()){
                                 ?>
                                 <a href="index.php?ctrl=security&action=profile"><span class="fas fa-user"></span>&nbsp;<?= App\Session::getUser()?></a>

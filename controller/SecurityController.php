@@ -84,11 +84,11 @@ class SecurityController extends AbstractController{
             if($user){
 
                 $hash = $user->getMotDePasse();
-
+                // var_dump($user);
                 if(password_verify($password1, $hash)){
 
                     $_SESSION["user"] = $user;
-                    
+                    // var_dump($_SESSION);
                 } else {
                     var_dump("password_verify retourne FALSE");
                 }
@@ -110,5 +110,11 @@ class SecurityController extends AbstractController{
             ]
             ];
     }
-    public function logout () {}
+    public function logout () {
+
+        unset($_SESSION["user"]);
+        var_dump($_SESSION);
+        self::redirectTo("home","index");
+
+    }
 }
