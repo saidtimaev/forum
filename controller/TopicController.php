@@ -51,7 +51,7 @@ class TopicController extends AbstractController implements ControllerInterface{
         foreach($_POST as $key => $value ){
 
             if($key != "submit" && $key != "texte"){
-                $data[$key] = $value;
+                $data[$key] = str_replace("'","\'",$value);
                 
             }
 
@@ -65,7 +65,7 @@ class TopicController extends AbstractController implements ControllerInterface{
 
         $data = [];
 
-        $data['texte'] = $_POST['texte'];
+        $data['texte'] = str_replace("'","\'",$_POST['texte']);
         $data['utilisateur_id'] = $_POST['utilisateur_id'];
         $data['topic_id'] = $idNewTopic;
 

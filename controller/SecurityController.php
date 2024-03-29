@@ -116,7 +116,7 @@ class SecurityController extends AbstractController{
     public function logout () {
 
         unset($_SESSION["user"]);
-        var_dump($_SESSION);
+        // var_dump($_SESSION);
         self::redirectTo("home","index");
 
     }

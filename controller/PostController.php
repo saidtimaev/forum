@@ -43,7 +43,7 @@ class PostController extends AbstractController implements ControllerInterface{
         foreach($_POST as $key => $value ){
 
             if($key != "submit"){
-                $data[$key] = $value;
+                $data[$key] = str_replace("'","\'",$value);
                 
             }
 
