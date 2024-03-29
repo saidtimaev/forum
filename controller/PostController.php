@@ -37,24 +37,31 @@ class PostController extends AbstractController implements ControllerInterface{
 
     public function ajouterPost() {
 
+        $postManager = new PostManager();
 
-        $data = [];
+        if(isset($_POST["submit"])) {
 
-        foreach($_POST as $key => $value ){
+            $texte = filter_input(INPUT_POST, "texte", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL);
+            $password1 = filter_input(INPUT_POST, "password1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            if($key != "submit"){
-                $data[$key] = str_replace("'","\'",$value);
-                
+            $data = [];
+
+            foreach($_POST as $key => $value ){
+
+                if($key != "submit"){
+                    $data[$key] = str_replace("'","\'",$value);
+                    
+                }
+
             }
 
+            $postManager->add($data);
         }
+        
 
         // var_dump($data); die;
     
-        $postManager = new PostManager();
-        
-        $postManager->add($data);
-
         self::redirectTo("post","listPostsByTopic",$data["topic_id"]);
 
     }
