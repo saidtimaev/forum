@@ -38,12 +38,24 @@ class PostController extends AbstractController implements ControllerInterface{
     public function ajouterPost() {
 
         $postManager = new PostManager();
+        $topicManager = new TopicManager();
 
         if(isset($_POST["submit"])) {
 
             $texte = filter_input(INPUT_POST, "texte", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL);
-            $password1 = filter_input(INPUT_POST, "password1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $idTopic = filter_input(INPUT_POST, "topic_id", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            
+            $topic = $topicManager->findOneById($idTopic);
+
+            if($topic?->getVerrouillage()){
+                var_dump('Le topic est verrouillé');
+            } 
+            
+            // if($topic){
+            //     if($topic->getVerouillage()){
+            //         var_dump('Le topic est verrouillé');
+            //     }
+            // }
 
             $data = [];
 
@@ -56,6 +68,7 @@ class PostController extends AbstractController implements ControllerInterface{
 
             }
 
+            $data['utilisateur_id'] = !empty($_SESSION['user']) ? $_SESSION['user']->getId() : null;
             $postManager->add($data);
         }
         
