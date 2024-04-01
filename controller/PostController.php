@@ -40,11 +40,15 @@ class PostController extends AbstractController implements ControllerInterface{
         $postManager = new PostManager();
         $topicManager = new TopicManager();
 
+        $texte = filter_input(INPUT_POST, "texte", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $idTopic = filter_input(INPUT_POST, "topic_id", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        
+
         if(isset($_POST["submit"])) {
 
-            $texte = filter_input(INPUT_POST, "texte", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $idTopic = filter_input(INPUT_POST, "topic_id", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             
+            
+            // var_dump($_POST);die;
             $topic = $topicManager->findOneById($idTopic);
 
             if($topic?->getVerrouillage()){
@@ -57,25 +61,22 @@ class PostController extends AbstractController implements ControllerInterface{
             //     }
             // }
 
-            $data = [];
+            $data = [
+                "texte" => str_replace("'","\'",$texte),
+                "topic_id" => $idTopic,
+            ];
 
-            foreach($_POST as $key => $value ){
-
-                if($key != "submit"){
-                    $data[$key] = str_replace("'","\'",$value);
-                    
-                }
-
-            }
+            
 
             $data['utilisateur_id'] = !empty($_SESSION['user']) ? $_SESSION['user']->getId() : null;
+            // var_dump($data);die;
             $postManager->add($data);
         }
         
 
         // var_dump($data); die;
     
-        self::redirectTo("post","listPostsByTopic",$data["topic_id"]);
+        self::redirectTo("post","listPostsByTopic",$idTopic);
 
     }
 

@@ -28,4 +28,29 @@ class PostManager extends Manager{
             $this->className
         );
     }
+
+    //On redéfinit la fonction add() pour gérer le cas où utilisateur_id est NULL
+    public function add($data){
+        $keys = array_keys($data);
+        $values = array_values($data);
+        
+        $sqlValues = [];
+
+        foreach ($values as $value) {
+            $sqlValues[] = $value === null ? 'NULL' : "'$value'";     
+        }
+    
+        $sql = "INSERT INTO ".$this->tableName."
+                (".implode(',', $keys).") 
+                VALUES
+                (".implode(',', $sqlValues).")";
+
+        try {
+            return DAO::insert($sql);
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+            die();
+        }
+    }
+    
 }
