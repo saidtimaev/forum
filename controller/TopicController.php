@@ -45,37 +45,39 @@ class TopicController extends AbstractController implements ControllerInterface{
 
     public function ajouterTopic() {
 
-
-        $data = [];
-
-        foreach($_POST as $key => $value ){
-
-            if($key != "submit" && $key != "texte"){
-                $data[$key] = str_replace("'","\'",$value);
-                
-            }
-
-        }
-
-        // var_dump($data); die;
-    
-        $topicManager = new TopicManager();
-        
-        $idNewTopic = $topicManager->add($data);
-
-        $data = [];
-
-        $data['texte'] = str_replace("'","\'",$_POST['texte']);
-        $data['utilisateur_id'] = $_POST['utilisateur_id'];
-        $data['topic_id'] = $idNewTopic;
-
         $postManager = new PostManager();
-        
-        $postManager->add($data);
+        $topicManager = new TopicManager();
 
-       
+        $titre = filter_input(INPUT_POST, "titre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $idCategorie = filter_input(INPUT_POST, "categorie_id", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $texte = filter_input(INPUT_POST, "texte", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-        self::redirectTo("post","listPostsByTopic", $idNewTopic);
+        if(isset($_POST["submit"])) {
+
+            $data = [
+                "titre" => str_replace("'","\'",$titre),
+                "categorie_id" => $idCategorie,
+                "utilisateur_id"=> $_SESSION['user']->getId()
+            ];
+
+            // var_dump($data);die;
+
+            $idTopic = $topicManager->add($data);
+
+            // var_dump($idTopic);die;
+
+            $data = [
+                "texte" => str_replace("'","\'",$texte),
+                "topic_id" => $idTopic,
+                "utilisateur_id"=> $_SESSION['user']->getId()
+            ];
+
+            // var_dump($data);die;
+
+            $postManager->add($data);
+
+            self::redirectTo("post","listPostsByTopic", $idTopic);
+        }
 
     }
 }
