@@ -15,16 +15,18 @@ class HomeController extends AbstractController implements ControllerInterface {
     }
         
     public function users(){
-        $this->restrictTo("ROLE_USER");
+
+        // var_dump('test');die;
+        $this->restrictTo("ROLE_ADMIN");
 
         $manager = new UtilisateurManager();
-        $users = $manager->findAll(['register_date', 'DESC']);
+        $utilisateurs = $manager->findAll(['dateInscription', 'DESC']);
 
         return [
             "view" => VIEW_DIR."list/listUtilisateurs.php",
             "meta_description" => "Liste des utilisateurs du forum",
             "data" => [ 
-                "users" => $users 
+                "utilisateurs" => $utilisateurs 
             ]
         ];
     }

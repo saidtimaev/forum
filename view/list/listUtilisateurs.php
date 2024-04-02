@@ -1,15 +1,14 @@
 <?php
-    $categories = $result["data"]['categories']; 
+    $utilisateurs = $result["data"]['utilisateurs']; 
 ?>
 
-<h1>Liste des catégories</h1>
+<h1>Liste des utilisateurs</h1>
 
 <?php
-foreach($categories as $categorie ){ ?>
-    <p><a href="index.php?ctrl=topic&action=listTopicsByCategory&id=<?= $categorie->getId() ?>"><?= $categorie->getNom() ?></a></p>
+foreach($utilisateurs as $utilisateur){ ?>
+    <p><a href="index.php?index.php?ctrl=security&action=profile&id=<?= $utilisateur->getId() ?>"><?= $utilisateur->getPseudonyme() ?></a></p>
 <?php } ?>
 
-<a href="index.php?ctrl=categorie&action=ajouterCategorieAffichage">Nouvelle catégorie</a>
 
 
   
