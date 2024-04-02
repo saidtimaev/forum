@@ -39,6 +39,7 @@ class PostController extends AbstractController implements ControllerInterface{
 
         $postManager = new PostManager();
         $topicManager = new TopicManager();
+        $session = new Session();
 
         $texte = filter_input(INPUT_POST, "texte", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $idTopic = filter_input(INPUT_POST, "topic_id", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -46,8 +47,6 @@ class PostController extends AbstractController implements ControllerInterface{
 
         if(isset($_POST["submit"])) {
 
-            
-            
             // var_dump($_POST);die;
             $topic = $topicManager->findOneById($idTopic);
 
@@ -71,7 +70,16 @@ class PostController extends AbstractController implements ControllerInterface{
             $data['utilisateur_id'] = !empty($_SESSION['user']) ? $_SESSION['user']->getId() : null;
             // var_dump($data);die;
             $postManager->add($data);
+
+            $session->addFlash("success","Post ajouté");
+
+        } else {
+
+            $session->addFlash("error","Le post n'as pas pu être ajouté");
+            
         }
+
+        // var_dump($_SESSION);die;
         
 
         // var_dump($data); die;
