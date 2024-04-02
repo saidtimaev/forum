@@ -47,12 +47,13 @@ class TopicController extends AbstractController implements ControllerInterface{
 
         $postManager = new PostManager();
         $topicManager = new TopicManager();
+        $session = new Session();
 
         $titre = filter_input(INPUT_POST, "titre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $idCategorie = filter_input(INPUT_POST, "categorie_id", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $texte = filter_input(INPUT_POST, "texte", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-        if(isset($_POST["submit"])) {
+        if(isset($_POST["submit"]) && ($titre != "") && ($texte != "")) {
 
             $data = [
                 "titre" => str_replace("'","\'",$titre),
@@ -60,11 +61,7 @@ class TopicController extends AbstractController implements ControllerInterface{
                 "utilisateur_id"=> $_SESSION['user']->getId()
             ];
 
-            // var_dump($data);die;
-
             $idTopic = $topicManager->add($data);
-
-            // var_dump($idTopic);die;
 
             $data = [
                 "texte" => str_replace("'","\'",$texte),
@@ -72,11 +69,18 @@ class TopicController extends AbstractController implements ControllerInterface{
                 "utilisateur_id"=> $_SESSION['user']->getId()
             ];
 
-            // var_dump($data);die;
-
             $postManager->add($data);
+            
+            $session->addFlash("success","Topic crée!");
 
             self::redirectTo("post","listPostsByTopic", $idTopic);
+
+        } else {
+
+            $session->addFlash("error","Veuillez remplir tous les champs!");
+
+            self::redirectTo("topic","ajouterTopicAffichage");
+            
         }
 
     }

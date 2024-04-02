@@ -33,7 +33,7 @@ class CategorieController extends AbstractController implements ControllerInterf
             "view" => VIEW_DIR."ajout/ajoutCategorie.php",
             "meta_description" => "Ajout de catégorie",
             "data" => [
-                
+            
             ]
         ];
     }
@@ -51,7 +51,6 @@ class CategorieController extends AbstractController implements ControllerInterf
                 "nom" => str_replace("'","\'",$nom)
             ];
 
-
             $idCategorie = $categorieManager->add($data);
 
             $session->addFlash("success","Catégorie ajoutée");
@@ -64,12 +63,6 @@ class CategorieController extends AbstractController implements ControllerInterf
 
             self::redirectTo("categorie","ajouterCategorieAffichage");
 
-
         }
-
-        
-
     }
-
-
 }
