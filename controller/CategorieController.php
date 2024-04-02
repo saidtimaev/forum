@@ -40,25 +40,34 @@ class CategorieController extends AbstractController implements ControllerInterf
 
     public function ajouterCategorie() {
 
+        $categorieManager = new CategorieManager();
+        $session = new Session();
 
-        $data = [];
+        $nom = filter_input(INPUT_POST, "nom", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-        foreach($_POST as $key => $value ){
+        if(isset($_POST["submit"]) && ($nom != "")) {
 
-            if($key != "submit"){
-                $data[$key] = $value;
-                
-            }
+            $data = [
+                "nom" => str_replace("'","\'",$nom)
+            ];
+
+
+            $idCategorie = $categorieManager->add($data);
+
+            $session->addFlash("success","Catégorie ajoutée");
+
+            self::redirectTo("topic","listTopicsByCategory",$idCategorie);
+
+        } else {
+
+            $session->addFlash("error","Veuillez saisir un nom de catégorie!");
+
+            self::redirectTo("categorie","ajouterCategorieAffichage");
+
 
         }
 
-        // var_dump($data); die;
-    
-        $categorieManager = new CategorieManager();
         
-        $categorieManager->add($data);
-
-        self::redirectTo("categorie","index");
 
     }
 

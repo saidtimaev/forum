@@ -33,8 +33,6 @@ class PostController extends AbstractController implements ControllerInterface{
     }
 
     
-    
-
     public function ajouterPost() {
 
         $postManager = new PostManager();
@@ -45,9 +43,8 @@ class PostController extends AbstractController implements ControllerInterface{
         $idTopic = filter_input(INPUT_POST, "topic_id", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         
 
-        if(isset($_POST["submit"])) {
+        if(isset($_POST["submit"]) && ($texte != "")) {
 
-            // var_dump($_POST);die;
             $topic = $topicManager->findOneById($idTopic);
 
             if($topic?->getVerrouillage()){
@@ -65,24 +62,17 @@ class PostController extends AbstractController implements ControllerInterface{
                 "topic_id" => $idTopic,
             ];
 
-            
-
             $data['utilisateur_id'] = !empty($_SESSION['user']) ? $_SESSION['user']->getId() : null;
-            // var_dump($data);die;
+
             $postManager->add($data);
 
             $session->addFlash("success","Post ajouté");
 
         } else {
 
-            $session->addFlash("error","Le post n'as pas pu être ajouté");
+            $session->addFlash("error","Veuillez saisir un message!");
             
         }
-
-        // var_dump($_SESSION);die;
-        
-
-        // var_dump($data); die;
     
         self::redirectTo("post","listPostsByTopic",$idTopic);
 
