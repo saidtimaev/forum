@@ -77,32 +77,34 @@ class SecurityController extends AbstractController{
         $session = new Session();
 
         
-        if(isset($_POST["submit"]) && ($pseudonymeOuEmail != "") && ($password1 != "")) {
+        if(isset($_POST["submit"])) {
 
-            $user = $managerUtilisateur->findUtilisateur($pseudonymeOuEmail, $pseudonymeOuEmail);
+            if(($pseudonymeOuEmail != "") && ($password1 != "")){
 
-            if($user){
+                $user = $managerUtilisateur->findUtilisateur($pseudonymeOuEmail, $pseudonymeOuEmail);
 
-                $hash = $user->getMotDePasse();
-                // var_dump($user);
-                if(password_verify($password1, $hash)){
+                if($user){
 
-                    $_SESSION["user"] = $user;
-                    // var_dump($_SESSION);
+                    $hash = $user->getMotDePasse();
+
+                    if(password_verify($password1, $hash)){
+
+                        $_SESSION["user"] = $user;
+                        
+                        $session->addFlash("success","Authentification reussie!");
+
+                    } else {
+                        $session->addFlash("error","Champs renseignés incorrects");
+                    }
+
                 } else {
-                    self::redirectTo("security","login");
-                    // Message flash "Mot de passe incorrect, veuillez renouveler votre saisie"
+                    $session->addFlash("error","Champs renseignés incorrects");
                 }
 
             } else {
-                self::redirectTo("security","login");
-                // Message flash "utilisateur n'existe pas, créez un compte"
-            }
-            
+                $session->addFlash("error","Veuillez renseigner tous les champs!");
+            } 
         }
-        
-        
-        
         
         return [
             "view" => VIEW_DIR."login.php",
@@ -114,9 +116,13 @@ class SecurityController extends AbstractController{
     }
     public function logout () {
 
+        $session = new Session();
+
         unset($_SESSION["user"]);
-        // var_dump($_SESSION);
-        self::redirectTo("home","index");
+
+        $session->addFlash("success","Vous êtes déconnecté!");
+
+        self::redirectTo("security","login");
 
     }
 
