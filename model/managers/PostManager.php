@@ -52,5 +52,19 @@ class PostManager extends Manager{
             die();
         }
     }
+
+    public function findPostsByUser($id) {
+
+        $sql = "SELECT * 
+                FROM ".$this->tableName." t 
+                WHERE t.utilisateur_id = :id
+                ORDER BY t.dateCreation ASC";
+       
+        // la requête renvoie plusieurs enregistrements --> getMultipleResults
+        return  $this->getMultipleResults(
+            DAO::select($sql, ['id' => $id]), 
+            $this->className
+        );
+    }
     
 }

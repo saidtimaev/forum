@@ -6,7 +6,7 @@
 
 <?php
 foreach($utilisateurs as $utilisateur){ ?>
-    <p><a href="index.php?index.php?ctrl=security&action=profile&id=<?= $utilisateur->getId() ?>"><?= $utilisateur->getPseudonyme() ?></a></p>
+    <p><a href="index.php?index.php?ctrl=home&action=infosUtilisateur&id=<?= $utilisateur->getId() ?>"><?= $utilisateur->getPseudonyme() ?></a></p>
 <?php } ?>
 
 

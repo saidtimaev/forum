@@ -3,6 +3,7 @@ namespace Controller;
 
 use App\AbstractController;
 use App\ControllerInterface;
+use Model\Managers\PostManager;
 use Model\Managers\UtilisateurManager;
 
 class HomeController extends AbstractController implements ControllerInterface {
@@ -27,6 +28,26 @@ class HomeController extends AbstractController implements ControllerInterface {
             "meta_description" => "Liste des utilisateurs du forum",
             "data" => [ 
                 "utilisateurs" => $utilisateurs 
+            ]
+        ];
+    }
+
+    public function infosUtilisateur($id){
+
+        $postManager = new PostManager();
+        $utilisateurManager = new UtilisateurManager();
+
+        $posts = $postManager->findPostsByUser($id);
+        $utilisateur = $utilisateurManager->findOneById($id);
+
+        // var_dump(iterator_to_array($posts));die;
+
+        return [
+            "view" => VIEW_DIR."infosUtilisateur.php",
+            "meta_description" => "Liste des informations d'un utilisateur",
+            "data" => [ 
+                "posts" => $posts,
+                "utilisateur"=>$utilisateur
             ]
         ];
     }
