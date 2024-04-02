@@ -1,6 +1,7 @@
 <?php
 namespace Controller;
 
+use App\Session;
 use App\AbstractController;
 use App\ControllerInterface;
 use Model\Managers\UtilisateurManager;
@@ -13,6 +14,8 @@ class SecurityController extends AbstractController{
         // var_dump($_POST);
 
         $managerUtilisateur = new UtilisateurManager();
+        $session = new Session();
+
         
         if(isset($_POST["submit"])) {
 
@@ -21,34 +24,40 @@ class SecurityController extends AbstractController{
             $password1 = filter_input(INPUT_POST, "password1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $password2 = filter_input(INPUT_POST, "password2", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            // var_dump("test");
+            if(($pseudonyme || $email || $password1 || $password2) != ""){
 
-            $data = [
-                "pseudonyme" => $pseudonyme,
-                "mail" => $email,
-                "motDePasse" => password_hash($password1,PASSWORD_DEFAULT),
-                "role"=> "ROLE_USER"
-            ];
-
-            $users = $managerUtilisateur->findUtilisateur($pseudonyme, $email);
-
-
-            if($users){
-
-                var_dump("L'utilisateur existe déjà!");
-
-            } else {
-
-                if($password1 == $password2){
-
-                    $managerUtilisateur->add($data);
+                $data = [
+                    "pseudonyme" => $pseudonyme,
+                    "mail" => $email,
+                    "motDePasse" => password_hash($password1,PASSWORD_DEFAULT),
+                    "role"=> "ROLE_USER"
+                ];
+    
+                $users = $managerUtilisateur->findUtilisateur($pseudonyme, $email);
+    
+    
+                if($users){
+    
+                    $session->addFlash("error","Pseudonyme ou email déjà utilisé!");
+    
                 } else {
+    
+                    if($password1 == $password2){
+    
+                        $managerUtilisateur->add($data);
 
-                    var_dump("Les mots de passe ne sont pas identiques!");
+                        $session->addFlash("success","Inscription reussie");
+
+                        self::redirectTo("security","login");
+
+                    } else {
+    
+                        $session->addFlash("error","Les mots de passe ne sont pas identiques!");
+
+                        
+                    }
                 }
-
             }
-            
         }
         
         
