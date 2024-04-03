@@ -35,7 +35,7 @@ abstract class Manager{
                 FROM ".$this->tableName." a
                 WHERE a.id_".$this->tableName." = :id
                 ";
-
+        // var_dump($sql);die;
         return $this->getOneOrNullResult(
             DAO::select($sql, ['id' => $id], false), 
             $this->className
@@ -105,5 +105,36 @@ abstract class Manager{
         }
         return false;
     }
+
+
+    public function update($data, $id) {
+        
+        $KeyValue = array();
+        
+    
+        // Construct the SET clause of the SQL query
+        foreach ($data as $key => $value) {
+            // Construct the column-value pairs
+            $KeyValue[] = "$key = '$value'";
+        }
+        // var_dump($id);die;
+        // Combine the column-value pairs into a comma-separated string
+        $set = implode(", ", $KeyValue);
+    
+        // Construct the SQL query to update the row
+        $sql = "UPDATE ".$this->tableName. " SET ".$set. " WHERE id_".$this->tableName." = :id";
+        // var_dump($sql);die;
+
+         
+
+        try{
+            return DAO::update($sql,['id' => $id]);
+        }
+        catch(\PDOException $e){
+            echo $e->getMessage();
+            die();
+        }
+    }
+
 
 }

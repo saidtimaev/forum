@@ -65,4 +65,44 @@ class CategorieController extends AbstractController implements ControllerInterf
 
         }
     }
+
+    public function modifierCategorie($id) {
+
+        $categorieManager = new CategorieManager();
+        $session = new Session();
+        
+        $categorie = $categorieManager->findOneById($id);
+
+        // var_dump($categorie);die;
+        var_dump($id);die;
+
+        $nom = filter_input(INPUT_POST, "nom", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        if(isset($_POST["submit"]) && ($nom != "")) {
+
+            $data = [
+                "nom" => str_replace("'","\'",$nom)
+            ];
+
+            // var_dump($id);die;
+            $categorieManager->update($data,$id);
+
+            
+
+            $session->addFlash("success","Catégorie ajoutée");
+
+            
+
+        } else {
+
+        }
+
+        return [
+            "view" => VIEW_DIR."modification/modificationCategorie.php",
+            "meta_description" => "Modification de catégorie",
+            "data" => [
+            "categorie"=>$categorie
+            ]
+        ];
+    }
 }
