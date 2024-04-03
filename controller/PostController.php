@@ -11,7 +11,7 @@ class PostController extends AbstractController implements ControllerInterface{
 
     public function index() {
 
-        self::redirectTo("categorie");
+        $this->redirectTo("categorie");
         
     }
 
@@ -74,7 +74,63 @@ class PostController extends AbstractController implements ControllerInterface{
             
         }
     
-        self::redirectTo("post","listPostsByTopic",$idTopic);
+        $this->redirectTo("post","listPostsByTopic",$idTopic);
+
+    }
+
+    public function modifierPost($id) {
+
+        $postManager = new PostManager();
+        $topicManager = new TopicManager();
+        $session = new Session();
+
+        $texte = filter_input(INPUT_POST, "texte", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $idTopic = filter_input(INPUT_POST, "topic_id", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        $post = $postManager->findOneById($id);
+        $topic = $topicManager->findOneById($idTopic);
+        
+
+        // var_dump($topic);die;
+
+        if(isset($_POST["submit"]) && ($texte != "")) {
+
+
+            if($topic?->getVerrouillage() && !Session::isAdmin()){
+            } 
+            
+            // if($topic){
+            //     if($topic->getVerouillage()){
+            //         var_dump('Le topic est verrouillé');
+            //     }
+            // }
+
+            $data = [
+                "texte" => str_replace("'","\'",$texte),
+            ];
+
+            //$data['utilisateur_id'] = !empty($_SESSION['user']) ? $_SESSION['user']->getId() : null;
+
+            $postManager->update($data,$id);
+
+            $session->addFlash("success","Post modifié");
+
+            $this->redirectTo("post","modifierPost", $id);
+
+        } else {
+
+            
+            
+        }
+    
+
+        return [
+            "view" => VIEW_DIR."modification/modificationPost.php",
+            "meta_description" => "Modification de post",
+            "data" => [
+            "post"=>$post
+            ]
+        ];
 
     }
 

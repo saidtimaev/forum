@@ -107,27 +107,30 @@ abstract class Manager{
     }
 
 
+    // Fonction qui permet de modifier un enregistrement, qui prend en parametre un tableau et un identifiant
     public function update($data, $id) {
         
+        //Tableau vide qui va stocker les paires Colonne + Valeur du SET 
         $KeyValue = array();
         
     
-        // Construct the SET clause of the SQL query
+        // SET de la requete SQL
         foreach ($data as $key => $value) {
-            // Construct the column-value pairs
+            // Ajout des paires au tableau
             $KeyValue[] = "$key = '$value'";
         }
         // var_dump($id);die;
-        // Combine the column-value pairs into a comma-separated string
+        // On crée une chaine de caractères à partir des paires qu'on assemble
         $set = implode(", ", $KeyValue);
     
-        // Construct the SQL query to update the row
+        //Requete SQL
         $sql = "UPDATE ".$this->tableName. " SET ".$set. " WHERE id_".$this->tableName." = :id";
         // var_dump($sql);die;
 
          
 
         try{
+            //Prepare et execute
             return DAO::update($sql,['id' => $id]);
         }
         catch(\PDOException $e){

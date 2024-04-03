@@ -6,7 +6,7 @@ use App\AbstractController;
 use App\ControllerInterface;
 use Model\Managers\UtilisateurManager;
 
-class SecurityController extends AbstractController{
+class SecurityController extends AbstractController implements ControllerInterface{
     // contiendra les méthodes liées à l'authentification : register, login et logout
 
     public function register() {
@@ -48,7 +48,7 @@ class SecurityController extends AbstractController{
 
                         $session->addFlash("success","Inscription reussie");
 
-                        self::redirectTo("security","login");
+                        $this->redirectTo("security","login");
 
                     } else {
     
@@ -122,7 +122,7 @@ class SecurityController extends AbstractController{
 
         $session->addFlash("success","Vous êtes déconnecté!");
 
-        self::redirectTo("security","login");
+        $this->redirectTo("security","login");
 
     }
 

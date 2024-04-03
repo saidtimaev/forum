@@ -8,7 +8,7 @@
 
 <?php
 foreach($posts as $post ){ ?>
-    <p>"<?= $post ?>" par <a href="#"><?= $post->getUtilisateur()?></a> le <?= $post->getDateCreation() ?></p>
+    <p>"<?= $post ?>" par <a href="#"><?= $post->getUtilisateur()?></a> le <?= $post->getDateCreation() ?> <a href="index.php?ctrl=post&action=modifierPost&id=<?=$post->getId()?>">Modifier</a></p>
 <?php } ?>
 
 <form action="index.php?ctrl=post&action=ajouterPost" method="post">

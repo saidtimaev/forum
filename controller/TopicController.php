@@ -73,13 +73,13 @@ class TopicController extends AbstractController implements ControllerInterface{
             
             $session->addFlash("success","Topic crée!");
 
-            self::redirectTo("post","listPostsByTopic", $idTopic);
+            $this->redirectTo("post","listPostsByTopic", $idTopic);
 
         } else {
 
             $session->addFlash("error","Veuillez remplir tous les champs!");
 
-            self::redirectTo("topic","ajouterTopicAffichage");
+            $this->redirectTo("topic","ajouterTopicAffichage");
             
         }
 
@@ -104,7 +104,7 @@ class TopicController extends AbstractController implements ControllerInterface{
 
             $session->addFlash("success","Topic crée!");
 
-            self::redirectTo("post","listPostsByTopic", $id);
+            $this->redirectTo("post","listPostsByTopic", $id);
 
         } 
 

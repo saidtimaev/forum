@@ -55,13 +55,13 @@ class CategorieController extends AbstractController implements ControllerInterf
 
             $session->addFlash("success","Catégorie ajoutée");
 
-            self::redirectTo("topic","listTopicsByCategory",$idCategorie);
+            $this->redirectTo("topic","listTopicsByCategory",$idCategorie);
 
         } else {
 
             $session->addFlash("error","Veuillez saisir un nom de catégorie!");
 
-            self::redirectTo("categorie","ajouterCategorieAffichage");
+            $this->redirectTo("categorie","ajouterCategorieAffichage");
 
         }
     }
@@ -86,7 +86,7 @@ class CategorieController extends AbstractController implements ControllerInterf
     
                 $session->addFlash("success","Catégorie modifiée!");
 
-                self::redirectTo("topic","listTopicsByCategory",$id);
+                $this->redirectTo("topic","listTopicsByCategory",$id);
 
             } else {
 
