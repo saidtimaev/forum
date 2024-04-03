@@ -72,29 +72,27 @@ class CategorieController extends AbstractController implements ControllerInterf
         $session = new Session();
         
         $categorie = $categorieManager->findOneById($id);
-
-        // var_dump($categorie);die;
-        var_dump($id);die;
-
+       
         $nom = filter_input(INPUT_POST, "nom", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-        if(isset($_POST["submit"]) && ($nom != "")) {
+        if(isset($_POST["submit"])) {
 
-            $data = [
-                "nom" => str_replace("'","\'",$nom)
-            ];
+            if($nom != ""){
+                $data = [
+                    "nom" => str_replace("'","\'",$nom)
+                ];
+    
+                $categorieManager->update($data,$id);
+    
+                $session->addFlash("success","Catégorie modifiée!");
 
-            // var_dump($id);die;
-            $categorieManager->update($data,$id);
+                self::redirectTo("topic","listTopicsByCategory",$id);
 
-            
+            } else {
 
-            $session->addFlash("success","Catégorie ajoutée");
+                $session->addFlash("error","Veuillez saisir un nom de catégorie!");
 
-            
-
-        } else {
-
+            }
         }
 
         return [
