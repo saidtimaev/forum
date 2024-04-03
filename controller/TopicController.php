@@ -84,4 +84,37 @@ class TopicController extends AbstractController implements ControllerInterface{
         }
 
     }
+
+    public function modifierTopic($id) {
+
+        $topicManager = new TopicManager();
+        $session = new Session();
+
+        $titre = filter_input(INPUT_POST, "titre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        $topic = $topicManager->findOneById($id);
+        
+        if(isset($_POST["submit"]) && ($titre != "")) {
+
+            $data = [
+                "titre" => str_replace("'","\'",$titre)
+            ];
+
+            $topicManager->update($data,$id);
+
+            $session->addFlash("success","Topic crée!");
+
+            self::redirectTo("post","listPostsByTopic", $id);
+
+        } 
+
+        return [
+            "view" => VIEW_DIR."modification/modificationTopic.php",
+            "meta_description" => "Modification de topic",
+            "data" => [
+            "topic"=>$topic
+            ]
+        ];
+
+    }
 }

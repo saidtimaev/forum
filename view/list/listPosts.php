@@ -3,7 +3,8 @@
     $posts = $result["data"]['posts']??[]; 
 ?>
 
-<h1>Liste des posts</h1>
+<h1><?= $topic->getTitre() ?></h1>
+<h2>Posts : </h2>
 
 <?php
 foreach($posts as $post ){ ?>
