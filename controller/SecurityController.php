@@ -205,4 +205,78 @@ class SecurityController extends AbstractController implements ControllerInterfa
             ];
         
     }
+
+    public function modifierMotDePasse($id) {
+
+        if($id == null){
+            $this->redirectTo("home","index");
+        }
+
+        // var_dump($_POST);
+
+        $managerUtilisateur = new UtilisateurManager();
+        $session = new Session();
+
+
+        // var_dump($utilisateur);die;
+
+        
+        if(isset($_POST["submit"])) {
+
+            $password1 = filter_input(INPUT_POST, "password1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $password2 = filter_input(INPUT_POST, "password2", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $password3 = filter_input(INPUT_POST, "password3", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            
+
+            if(($password1 && $password2 && $password3 ) != ""){
+
+                $data = [
+                    "motDePasse" => password_hash($password2,PASSWORD_DEFAULT),              
+                ];
+    
+                $user = $managerUtilisateur->findUtilisateur($_SESSION["user"]->getPseudonyme(), $_SESSION["user"]->getMail());
+    
+    
+                if($user){
+    
+                    $hash = $user->getMotDePasse();
+                   
+                    if(password_verify($password1, $hash)){
+
+                        if($password2 == $password3){
+
+                            $managerUtilisateur->update($data,$id);
+
+                            $session->addFlash("success","Mot de passe modifié avec succès!");
+
+                            $this->redirectTo("security","profile",$id);
+                        } else {
+
+                            $session->addFlash("error","Les mot de passes ne sont pas identiques!");
+
+                        }
+                    
+                        
+                    } else {
+
+                        $session->addFlash("error","Le mot de passe est incorrect!");
+    
+                    }
+                }
+            
+            } else {
+
+                $session->addFlash("error","Veuillez renseigner tous les champs!");
+
+            }
+        }
+        
+        return [
+            "view" => VIEW_DIR."modification/modificationMotDePasse.php",
+            "meta_description" => "Modification mot de passe",
+            "data" => [ 
+               
+            ]
+            ];
+    }
 }
