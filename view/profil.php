@@ -1,6 +1,9 @@
 
 
 <h1><?= $_SESSION["user"]?></h1>
+<p><a href="index.php?ctrl=security&action=modifierUtilisateur&id=<?=$_SESSION["user"]->getId()?>">Modifier profil</a></p>
+<p><a href="index.php?ctrl=security&action=modifierUtilisateur&id=<?=$_SESSION["user"]->getId()?>">Modifier mot de passe</a></p>
+
 
 <h2>Informations :</h2>
 
