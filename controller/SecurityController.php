@@ -274,9 +274,7 @@ class SecurityController extends AbstractController implements ControllerInterfa
         return [
             "view" => VIEW_DIR."modification/modificationMotDePasse.php",
             "meta_description" => "Modification mot de passe",
-            "data" => [ 
-               
-            ]
-            ];
+            "data" => []
+        ];
     }
 }

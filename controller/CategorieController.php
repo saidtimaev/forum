@@ -103,4 +103,19 @@ class CategorieController extends AbstractController implements ControllerInterf
             ]
         ];
     }
+
+    public function supprimerCategorie($id) {
+
+        
+        $categorieManager = new CategorieManager();
+        $session = new Session();
+        
+        $categorieManager->delete($id);
+
+        $session->addFlash("success","Catégorie supprimée avec succès!");
+
+        $this->redirectTo("categorie","index");
+
+        
+    }
 }
