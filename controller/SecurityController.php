@@ -155,25 +155,24 @@ class SecurityController extends AbstractController implements ControllerInterfa
             $pseudonyme = filter_input(INPUT_POST, "pseudonyme", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL);
             $password1 = filter_input(INPUT_POST, "password1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $password2 = filter_input(INPUT_POST, "password2", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            
 
-            if(($pseudonyme || $email || $password1 || $password2) != ""){
+            if(($pseudonyme && $email && $password1 ) != ""){
 
                 $data = [
                     "pseudonyme" => $pseudonyme,
-                    "mail" => $email,
-                    "motDePasse" => password_hash($password1,PASSWORD_DEFAULT),
-                    
+                    "mail" => $email,                    
                 ];
     
-                $users = $managerUtilisateur->findUtilisateur($pseudonyme, $email);
+                $user = $managerUtilisateur->findUtilisateur($pseudonyme, $email);
     
     
-                if($users){
+                if($user){
     
+                    $hash = $user->getMotDePasse();
                    
-                    if($password1 == $password2){
-    
+                    if(password_verify($password1, $hash)){
+
                         $managerUtilisateur->update($data,$id);
 
                         $utilisateur = $managerUtilisateur->findOneById($id);
@@ -183,13 +182,17 @@ class SecurityController extends AbstractController implements ControllerInterfa
                         $session->addFlash("success","Modification reussie");
 
                         $this->redirectTo("security","modifierUtilisateur",$id);
-
                     } else {
-    
-                        $session->addFlash("error","Les mots de passe ne sont pas identiques!");
 
+                        $session->addFlash("error","Le mot de passe est incorrect!");
+    
                     }
+                        
+
                 }
+            
+            } else {
+                $session->addFlash("error","Veuillez renseigner tous les champs!");
             }
         }
         

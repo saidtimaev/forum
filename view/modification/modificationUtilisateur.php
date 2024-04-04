@@ -13,9 +13,6 @@
     <label for="password1">Mot de passe : </label>
     <input type="password" name="password1" id="password1" ></br>
 
-    <label for="password2">Confirmer mot de passe : </label>
-    <input type="password" name="password2" id="password2"></br>
-
     <input type="submit" name="submit" value="Valider modifications"></br>
 
 </form>
