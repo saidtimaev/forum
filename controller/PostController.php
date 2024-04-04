@@ -131,7 +131,25 @@ class PostController extends AbstractController implements ControllerInterface{
             "post"=>$post
             ]
         ];
+    }
 
+    public function supprimerPost($id) {
+
+        
+        $postManager = new PostManager();
+        $session = new Session();
+
+        $post = $postManager->findOneById($id)->getTopic()->getId();
+
+        // var_dump($post);die;
+        
+        $postManager->delete($id);
+
+        $session->addFlash("success","Message supprimé avec succès!");
+
+        $this->redirectTo("post","listPostsByTopic",$post);
+
+        
     }
 
 }

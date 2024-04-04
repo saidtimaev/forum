@@ -115,6 +115,24 @@ class TopicController extends AbstractController implements ControllerInterface{
             "topic"=>$topic
             ]
         ];
+    }
 
+    public function supprimerTopic($id) {
+
+        
+        $topicManager = new TopicManager();
+        $session = new Session();
+
+        $topic = $topicManager->findOneById($id)->getCategorie()->getId();
+
+        // var_dump($post);die;
+        
+        $topicManager->delete($id);
+
+        $session->addFlash("success","Topic supprimé avec succès!");
+
+        $this->redirectTo("topic","listTopicsByCategory",$topic);
+
+        
     }
 }
