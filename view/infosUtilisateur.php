@@ -13,7 +13,7 @@
 
 <?php
 foreach($posts as $post){ ?>
-    <p>"<?= $post->getTexte() ?>" dans <a href="#"><?= $post->getTopic()?></a> <a href="#">(<?= $post->getTopic()->getCategorie()->getNom()?>)</a></p>
+    <p>"<?= $post->getTexte() ?>" dans <a href="#"><?= $post->getTopic()?> </a> <a href="#">(<?= $post->getTopic()->getCategorie()->getNom()?>)</a></p>
 <?php } ?>
 
 

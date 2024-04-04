@@ -84,7 +84,7 @@ final class Post extends Entity{
      */ 
     public function getTopic()
     {
-        return $this->topic;
+        return $this->topic ? $this->topic : "Topic supprimé";
     }
 
     /**
