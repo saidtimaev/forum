@@ -71,7 +71,6 @@ abstract class Manager{
         $sql = "DELETE FROM ".$this->tableName."
                 WHERE id_".$this->tableName." = :id
                 ";
-
         return DAO::delete($sql, ['id' => $id]); 
     }
 

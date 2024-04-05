@@ -277,4 +277,60 @@ class SecurityController extends AbstractController implements ControllerInterfa
             "data" => []
         ];
     }
+
+    public function supprimerUtilisateurAffichage($id) {
+
+    
+        return [
+            "view" => VIEW_DIR."suppression/suppressionCompte.php",
+            "meta_description" => "Suppression utilisateur",
+            "data" => []
+        ];
+    }
+    
+
+    public function supprimerUtilisateur($id) {
+
+        
+        
+        
+        if(isset($_POST["submit"])) {
+
+            $password1 = filter_input(INPUT_POST, "password1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            $managerUtilisateur = new UtilisateurManager();
+            $session = new Session();
+
+            if($password1 != ""){
+
+                $hash = $_SESSION['user']->getMotDePasse();
+
+                if(password_verify($password1, $hash)){
+
+                    $managerUtilisateur->delete($id);
+
+                    unset($_SESSION["user"]);
+                    
+                    $session->addFlash("success","Compte supprimé avec succès!");
+
+                    $this->redirectTo("home","index");
+
+                } else {
+                    $session->addFlash("error","Mot de passe incorrect!");
+                }
+
+        } else {
+            $session->addFlash("error","Veuillez saisir votre mot de passe!");
+        } 
+
+
+        
+
+        return [
+            "view" => VIEW_DIR."suppression/suppressionCompte.php",
+            "meta_description" => "Suppression utilisateur",
+            "data" => []
+        ];
+        }
+    }   
 }
