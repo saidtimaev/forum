@@ -4,7 +4,7 @@ namespace App;
 abstract class Entity{
 
     protected function hydrate($data){
-
+        
         foreach($data as $field => $value){
             // field = topic_id
             // fieldarray = ['topic','id']

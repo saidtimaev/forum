@@ -15,6 +15,8 @@ final class Utilisateur extends Entity{
     private $pseudonyme;
     private \DateTime $dateInscription;
     private $motDePasse;
+
+    private $isBanned;
     
     public function __construct($data){         
         $this->hydrate($data);        
@@ -149,6 +151,22 @@ final class Utilisateur extends Entity{
     {
         return ($this->role == $role);
     }
+
+    public function setIsBanned($isBanned)
+    {
+        $this->isBanned = $isBanned;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of isBanned
+     */ 
+    public function isBanned()
+    {
+        return $this->isBanned;
+    }
+
 
     public function __toString() {
         return $this->pseudonyme;

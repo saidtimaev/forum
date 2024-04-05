@@ -291,9 +291,6 @@ class SecurityController extends AbstractController implements ControllerInterfa
 
     public function supprimerUtilisateur($id) {
 
-        
-        
-        
         if(isset($_POST["submit"])) {
 
             $password1 = filter_input(INPUT_POST, "password1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -333,4 +330,41 @@ class SecurityController extends AbstractController implements ControllerInterfa
         ];
         }
     }   
+
+    public function bannirUtilisateur($id){
+
+        $utilisateurManager = new UtilisateurManager();
+        $session = new Session();
+
+        $utilisateur = $utilisateurManager->findOneById($id);
+
+        // var_dump($utilisateur->isBanned());die;
+
+
+        if($utilisateur->isBanned()==0){
+
+            $data = [
+                "isBanned" => 1,
+            ];
+
+            $utilisateurManager->update($data,$id);
+
+            $session->addFlash("success","L'utilisateur a été ban!");
+
+        } else {
+
+            $data = [
+                "isBanned" => 0,
+            ];
+
+            $utilisateurManager->update($data,$id);
+
+            $session->addFlash("success","L'utilisateur a été unban!");
+
+        }
+
+        $this->redirectTo("home","infosUtilisateur",$id);
+
+    }
+    
 }

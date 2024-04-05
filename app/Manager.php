@@ -124,7 +124,6 @@ abstract class Manager{
     
         //Requete SQL
         $sql = "UPDATE ".$this->tableName. " SET ".$set. " WHERE id_".$this->tableName." = :id";
-        // var_dump($sql);die;
 
          
 
