@@ -141,6 +141,7 @@ class TopicController extends AbstractController implements ControllerInterface{
         $session = new Session();
 
         $topic = $topicManager->findOneById($id);
+        $idCategorie = $topicManager->findOneById($id)->getCategorie()->getId();
 
 
         if($topic->getVerrouillage() == 0){
@@ -153,7 +154,19 @@ class TopicController extends AbstractController implements ControllerInterface{
     
             $session->addFlash("success","Topic verrouillé!");
 
+        } else {
+
+            $data = [
+                "verrouillage" => "0"
+            ];
+    
+            $topicManager->update($data,$id);
+    
+            $session->addFlash("success","Topic deverrouillé!");
+
         }
+
+        $this->redirectTo("topic","listTopicsByCategory",$idCategorie);
         
 
     }
