@@ -47,10 +47,14 @@ class PostController extends AbstractController implements ControllerInterface{
 
             $topic = $topicManager->findOneById($idTopic);
 
-            if($topic?->getVerrouillage()){
-                var_dump('Le topic est verrouillé');
-            } 
+            if($topic?->getVerrouillage() == 1){
+                 
+                $session->addFlash("error","Le topic est verrouillé, vous ne pouvez pas ajouter de message!");
+
+                $this->redirectTo("post","listPostsByTopic",$idTopic);
             
+            }
+
             // if($topic){
             //     if($topic->getVerouillage()){
             //         var_dump('Le topic est verrouillé');

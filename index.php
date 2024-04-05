@@ -19,11 +19,15 @@ session_start();
 //et on intègre la classe Session qui prend la main sur les messages en session
 use App\Session as Session;
 
+$idFiltre = isset($_GET['id']) ? filter_var($_GET['id'], FILTER_SANITIZE_FULL_SPECIAL_CHARS) : null;
+$actionFiltre = isset($_GET['action']) ? filter_var($_GET['action'], FILTER_SANITIZE_FULL_SPECIAL_CHARS) : null;
+$ctrlFiltre = isset($_GET['ctrl']) ? filter_var($_GET['ctrl'], FILTER_SANITIZE_FULL_SPECIAL_CHARS) : null;
+
 //---------REQUETE HTTP INTERCEPTEE-----------
 $ctrlname = DEFAULT_CTRL;//on prend le controller par défaut
 //ex : index.php?ctrl=home
 if(isset($_GET['ctrl'])){
-    $ctrlname = $_GET['ctrl'];
+    $ctrlname = $ctrlFiltre;
 }
 //on construit le namespace de la classe Controller à appeller
 $ctrlNS = "controller\\".ucfirst($ctrlname)."Controller";
@@ -38,10 +42,10 @@ $action = "index";//action par défaut de n'importe quel contrôleur
 //si l'action est présente dans l'url ET que la méthode correspondante existe dans le ctrl
 if(isset($_GET['action']) && method_exists($ctrl, $_GET['action'])){
     //la méthode à appeller sera celle de l'url
-    $action = $_GET['action'];
+    $action = $actionFiltre;
 }
 if(isset($_GET['id'])){
-    $id = $_GET['id'];
+    $id = $idFiltre;
 }
 else $id = null;
 //ex : HomeController->users(null)
