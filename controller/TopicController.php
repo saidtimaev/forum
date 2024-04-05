@@ -132,7 +132,29 @@ class TopicController extends AbstractController implements ControllerInterface{
         $session->addFlash("success","Topic supprimé avec succès!");
 
         $this->redirectTo("topic","listTopicsByCategory",$topic);
+    }
 
+    public function verrouillerTopic($id){
+
+
+        $topicManager = new TopicManager();
+        $session = new Session();
+
+        $topic = $topicManager->findOneById($id);
+
+
+        if($topic->getVerrouillage() == 0){
+
+            $data = [
+                "verrouillage" => "1"
+            ];
+    
+            $topicManager->update($data,$id);
+    
+            $session->addFlash("success","Topic verrouillé!");
+
+        }
         
+
     }
 }
