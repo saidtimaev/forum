@@ -75,47 +75,70 @@ class CategorieController extends AbstractController implements ControllerInterf
        
         $nom = filter_input(INPUT_POST, "nom", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-        if(isset($_POST["submit"])) {
+        // Si l'utilisateur souhaitant modifier la catégorie est un admin
+        if(Session::isAdmin()){
 
-            if($nom != ""){
-                $data = [
-                    "nom" => str_replace("'","\'",$nom)
-                ];
+            if(isset($_POST["submit"])) {
+
+                // Si le champ "nom" du formulaire n'est pas vide
+                if($nom != ""){
+                    $data = [
+                        "nom" => str_replace("'","\'",$nom)
+                    ];
+        
+                    $categorieManager->update($data,$id);
+        
+                    $session->addFlash("success","Catégorie modifiée!");
     
-                $categorieManager->update($data,$id);
+                    $this->redirectTo("categorie","index");
     
-                $session->addFlash("success","Catégorie modifiée!");
-
-                $this->redirectTo("topic","listTopicsByCategory",$id);
-
-            } else {
-
-                $session->addFlash("error","Veuillez saisir un nom de catégorie!");
-
+                } else {
+    
+                    $session->addFlash("error","Veuillez saisir un nom de catégorie!");
+    
+                }
             }
-        }
+    
+            return [
+                "view" => VIEW_DIR."modification/modificationCategorie.php",
+                "meta_description" => "Modification de catégorie",
+                "data" => [
+                "categorie"=>$categorie
+                ]
+            ];
 
-        return [
-            "view" => VIEW_DIR."modification/modificationCategorie.php",
-            "meta_description" => "Modification de catégorie",
-            "data" => [
-            "categorie"=>$categorie
-            ]
-        ];
+        // Si l'utilisateur souhaitant modifier la catégorie n'est pas un admin
+        } else {
+
+            $session->addFlash("error","Vous n'avez pas les autorisations nécessaires pour effectuer cette action!");
+            
+            $this->redirectTo("home","index");
+
+        }
     }
 
     public function supprimerCategorie($id) {
 
-        
-        $categorieManager = new CategorieManager();
-        $session = new Session();
-        
-        $categorieManager->delete($id);
+            $categorieManager = new CategorieManager();
+            $session = new Session();
 
-        $session->addFlash("success","Catégorie supprimée avec succès!");
+        // Si l'utilisateur qui veut supprimer une categorie est un admin
+        if(Session::isAdmin()){
 
-        $this->redirectTo("categorie","index");
+            $categorieManager->delete($id);
 
-        
+            $session->addFlash("success","Catégorie supprimée avec succès!");
+
+            $this->redirectTo("categorie","index");
+
+
+        // Si l'utilisateur qui veut supprimer une categorie n'est pas un admin
+        } else {
+
+            $session->addFlash("error","Vous n'avez pas les autorisations nécessaires pour effectuer cette action!");
+
+            $this->redirectTo("categorie","index");
+
+        }
     }
 }
