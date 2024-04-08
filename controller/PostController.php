@@ -82,25 +82,31 @@ class PostController extends AbstractController implements ControllerInterface{
 
     }
 
+    // Modifier un post
     public function modifierPost($id) {
 
+        
         $postManager = new PostManager();
         $topicManager = new TopicManager();
         $session = new Session();
-
+        
         $texte = filter_input(INPUT_POST, "texte", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $idTopic = filter_input(INPUT_POST, "topic_id", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
+        
         $post = $postManager->findOneById($id);
         $topic = $topicManager->findOneById($idTopic);
         
-
-        // var_dump($topic);die;
-
+        
         if(isset($_POST["submit"]) && ($texte != "")) {
+            
+            
+            // Si l'utilisateur souhaitant modifier le topic n'est pas un admin
+            if(!Session::isAdmin()){
+                
+                $session->addFlash("error","Vous n'avez pas les autorisations nécessaires pour effectuer cette action!");
 
+                $this->redirectTo("home","index");
 
-            if($topic?->getVerrouillage() && !Session::isAdmin()){
             } 
             
             // if($topic){
@@ -121,39 +127,48 @@ class PostController extends AbstractController implements ControllerInterface{
 
             $this->redirectTo("post","modifierPost", $id);
 
+        } 
+
+        // Si l'admin souhaite modifier alors on le dirige vers la vue de la modification du post
+        if(Session::isAdmin()){
+
+            return [
+                "view" => VIEW_DIR."modification/modificationPost.php",
+                "meta_description" => "Modification de post",
+                "data" => [
+                "post"=>$post
+                ]
+            ];
+
+
+        // Si ce n'est pas l'admin qui souhaite modifier le post 
         } else {
 
-            
-            
+            $session->addFlash("error","Vous n'avez pas les autorisations pour effectuer cette action!");
+
+            $this->redirectTo("home","index");
+
         }
-    
-
-        return [
-            "view" => VIEW_DIR."modification/modificationPost.php",
-            "meta_description" => "Modification de post",
-            "data" => [
-            "post"=>$post
-            ]
-        ];
-    }
-
-    public function supprimerPost($id) {
-
-        
-        $postManager = new PostManager();
-        $session = new Session();
-
-        $post = $postManager->findOneById($id)->getTopic()->getId();
-
-        // var_dump($post);die;
-        
-        $postManager->delete($id);
-
-        $session->addFlash("success","Message supprimé avec succès!");
-
-        $this->redirectTo("post","listPostsByTopic",$post);
-
         
     }
+
+    // public function supprimerPost($id) {
+
+        
+    //     $postManager = new PostManager();
+    //     $session = new Session();
+
+    //     $post = $postManager->findOneById($id)->getTopic()->getId();
+
+    //     // var_dump($post);die;
+        
+    //     $postManager->delete($id);
+
+    //     $session->addFlash("success","Message supprimé avec succès!");
+
+    //     $this->redirectTo("post","listPostsByTopic",$post);
+
+        
+    // }
 
 }
