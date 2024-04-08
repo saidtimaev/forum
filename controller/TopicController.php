@@ -106,28 +106,47 @@ class TopicController extends AbstractController implements ControllerInterface{
         $titre = filter_input(INPUT_POST, "titre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         $topic = $topicManager->findOneById($id);
-        
-        if(isset($_POST["submit"]) && ($titre != "")) {
 
-            $data = [
-                "titre" => str_replace("'","\'",$titre)
+        if(Session::getUser()){
+
+            if(Session::isAdmin() || Session::getUser()->getId() == $topic->getUser()->getId()){
+
+                if(isset($_POST["submit"]) && ($titre != "")) {
+    
+                    $data = [
+                        "titre" => str_replace("'","\'",$titre)
+                    ];
+        
+                    $topicManager->update($data,$id);
+        
+                    $session->addFlash("success","Topic crée!");
+        
+                    $this->redirectTo("post","listPostsByTopic", $id);
+        
+                } 
+        
+                
+    
+            } else {
+    
+                $session->addFlash("error","Vous n'avez pas les autorisations nécessaires pour effectuer cette action!");
+    
+                $this->redirectTo("categorie","index");
+    
+            }
+
+            return [
+                "view" => VIEW_DIR."modification/modificationTopic.php",
+                "meta_description" => "Modification de topic",
+                "data" => [
+                "topic"=>$topic
+                ]
             ];
 
-            $topicManager->update($data,$id);
-
-            $session->addFlash("success","Topic crée!");
-
-            $this->redirectTo("post","listPostsByTopic", $id);
-
-        } 
-
-        return [
-            "view" => VIEW_DIR."modification/modificationTopic.php",
-            "meta_description" => "Modification de topic",
-            "data" => [
-            "topic"=>$topic
-            ]
-        ];
+        }
+        
+       
+        
     }
 
     public function supprimerTopic($id) {
