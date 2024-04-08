@@ -8,7 +8,10 @@
 
 <?php
 foreach($posts as $post ){ ?>
-    <p>"<?= $post ?>" par <a href="#"><?= $post->getUtilisateur()?></a> le <?= $post->getDateCreation() ?> <a href="index.php?ctrl=post&action=modifierPost&id=<?=$post->getId()?>">Modifier</a> </p>
+    <p>"<?= $post ?>" par <a href="#"><?= $post->getUtilisateur()?></a> le <?= $post->getDateCreation() ?> 
+    <!-- Si l'utilisateur est un ADMIN ou que c'est le l'auteur du post et qu'il n'est pas ban -->
+    <?php if(App\Session::getUser() && App\Session::getUser()->isBanned()==0 && App\Session::getUser()->getId()== $post->getUtilisateur()->getId() || App\Session::isAdmin()){?><a href="index.php?ctrl=post&action=modifierPost&id=<?=$post->getId()?>">Modifier</a> </p><?php } else { echo " "; }?>
+    
 <?php } ?>
 
 <form action="index.php?ctrl=post&action=ajouterPost" method="post">

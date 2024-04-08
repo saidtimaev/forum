@@ -100,8 +100,8 @@ class PostController extends AbstractController implements ControllerInterface{
         if(isset($_POST["submit"]) && ($texte != "")) {
             
             
-            // Si l'utilisateur souhaitant modifier le topic n'est pas un admin
-            if(!Session::isAdmin()){
+            // Si l'utilisateur souhaitant modifier le topic n'est pas un admin ou l'auteur du post 
+            if(!Session::isAdmin() || !Session::getUser() || Session::getUser()->getId()!= $id || Session::getUser()->isBanned()==1){
                 
                 $session->addFlash("error","Vous n'avez pas les autorisations nécessaires pour effectuer cette action!");
 
@@ -129,26 +129,38 @@ class PostController extends AbstractController implements ControllerInterface{
 
         } 
 
-        // Si l'admin souhaite modifier alors on le dirige vers la vue de la modification du post
-        if(Session::isAdmin()){
+        // Si un utilisateur est en session
+        if(Session::getUser()){
+            // Si l'admin ou l'auteur du post qui n'est pas banni souhaite modifier alors on le dirige vers la vue de la modification du post
+            if(Session::isAdmin() ||  Session::getUser()->getId()== $id && Session::getUser()->isBanned()==0){
 
-            return [
-                "view" => VIEW_DIR."modification/modificationPost.php",
-                "meta_description" => "Modification de post",
-                "data" => [
-                "post"=>$post
-                ]
-            ];
+                return [
+                    "view" => VIEW_DIR."modification/modificationPost.php",
+                    "meta_description" => "Modification de post",
+                    "data" => [
+                    "post"=>$post
+                    ]
+                ];
+    
+    
+            // Si ce n'est pas l'admin qui souhaite modifier le post 
+            } else {
+    
+                $session->addFlash("error","Vous n'avez pas les autorisations pour effectuer cette action!");
+    
+                $this->redirectTo("home","index");
+    
+            }
 
-
-        // Si ce n'est pas l'admin qui souhaite modifier le post 
+        // Si aucun utilisateur est en session
         } else {
 
             $session->addFlash("error","Vous n'avez pas les autorisations pour effectuer cette action!");
-
+            
             $this->redirectTo("home","index");
-
         }
+        
+        
         
     }
 
