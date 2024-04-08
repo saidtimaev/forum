@@ -31,8 +31,21 @@ class TopicController extends AbstractController implements ControllerInterface{
         ];
     }
 
-    public function ajouterTopicAffichage() {
+    // Affichage de la page d'ajout de topic
+    public function ajouterTopicAffichage($id) {
 
+        $session = new Session();
+        
+        // var_dump($_SESSION['user']->isBanned());die;
+
+        // Si l'utilisateur est ban
+        if(Session::getUser()->isBanned()==1){
+
+            $session->addFlash("error","Vous avez été ban, vous ne pouvez pas créer de topic, contactez un admin!");
+
+            $this->redirectTo("topic","listTopicsByCategory",$id);
+
+        }
 
         return [
             "view" => VIEW_DIR."ajout/ajoutTopic.php",

@@ -16,4 +16,9 @@ foreach($topics as $topic ){ ?>
     </p>
 <?php } ?>
 
-<a href="index.php?ctrl=topic&action=ajouterTopicAffichage&id=<?= $id?>">Nouveau topic</a>
+<!-- Si l'utilisateur n'est pas ban -->
+<?php if(!App\Session::getUser()->isBanned()==1){ ?>
+    <a href="index.php?ctrl=topic&action=ajouterTopicAffichage&id=<?= $id?>">Nouveau topic</a>
+<?php } ?>
+
+

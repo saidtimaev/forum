@@ -20,7 +20,7 @@ foreach($categories as $categorie ){ ?>
     </div>
 <?php } ?>
 
-<a href="index.php?ctrl=categorie&action=ajouterCategorieAffichage">Nouvelle catégorie</a>
+<a href="index.php?ctrl=categorie&action=ajouterCategorieAffichage&id="<?=$categorie->getId()?>>Nouvelle catégorie</a>
 
 
   
