@@ -4,7 +4,12 @@
 ?>
 
 <h1><?= $utilisateur->getPseudonyme()?></h2>
-<p><a href="index.php?ctrl=security&action=bannirUtilisateur&id=<?=$utilisateur->getId()?>">Ban</a></p>
+<p>
+    <a href="index.php?ctrl=security&action=bannirUtilisateur&id=<?=$utilisateur->getId()?>">
+        <!-- On affiche ban ou unban selon le statut de l'utilisateur -->
+        <?= ($utilisateur->isBanned()==1) ? "Unban" : "Ban"  ?>
+    </a>
+</p>
 <p><span>Pseudo : </span><?= $utilisateur->getPseudonyme()?></p>
 <p><span>Rôle : </span><?= ($utilisateur->getRole() == "ROLE_USER") ? "Utilisateur" : "Admin"?></p>
 <p><span>Email : </span><?= $utilisateur->getMail()?></p>

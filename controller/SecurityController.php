@@ -340,30 +340,49 @@ class SecurityController extends AbstractController implements ControllerInterfa
 
         // var_dump($utilisateur->isBanned());die;
 
+        // Si l'utilisateur qui veut ban est un admin
+        if(Session::isAdmin()){
+            
+            // Si l'utilisateur n'était pas ban on le ban
+            if($utilisateur->isBanned()==0){
 
-        if($utilisateur->isBanned()==0){
+                $data = [
+                    "isBanned" => 1,
+                ];
+    
+                $utilisateurManager->update($data,$id);
+    
+                $session->addFlash("success","L'utilisateur a été ban!");
 
-            $data = [
-                "isBanned" => 1,
-            ];
+                $this->redirectTo("home","infosUtilisateur",$id);
+    
+            // S'il était ban on l'unban
+            } else {
+    
+                $data = [
+                    "isBanned" => 0,
+                ];
+    
+                $utilisateurManager->update($data,$id);
+    
+                $session->addFlash("success","L'utilisateur a été unban!");
 
-            $utilisateurManager->update($data,$id);
-
-            $session->addFlash("success","L'utilisateur a été ban!");
-
+                $this->redirectTo("home","infosUtilisateur",$id);
+    
+            }
+        
+        // Si l'utilisateur qui veut ban n'est pas un admin    
         } else {
 
-            $data = [
-                "isBanned" => 0,
-            ];
+            $session->addFlash("error","Vous n'avez pas les autorisations pour effectuer cette action!");
 
-            $utilisateurManager->update($data,$id);
-
-            $session->addFlash("success","L'utilisateur a été unban!");
+            $this->redirectTo("home","index");
 
         }
 
-        $this->redirectTo("home","infosUtilisateur",$id);
+        
+
+        
 
     }
     
