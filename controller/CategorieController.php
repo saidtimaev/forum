@@ -29,13 +29,7 @@ class CategorieController extends AbstractController implements ControllerInterf
     public function ajouterCategorieAffichage() {
 
 
-        return [
-            "view" => VIEW_DIR."ajout/ajoutCategorie.php",
-            "meta_description" => "Ajout de catégorie",
-            "data" => [
-            
-            ]
-        ];
+        
     }
 
     public function ajouterCategorie() {
@@ -45,25 +39,51 @@ class CategorieController extends AbstractController implements ControllerInterf
 
         $nom = filter_input(INPUT_POST, "nom", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-        if(isset($_POST["submit"]) && ($nom != "")) {
+        // Si l'utilisateur est un admin
+        if(Session::isAdmin()){
 
-            $data = [
-                "nom" => str_replace("'","\'",$nom)
-            ];
+            // Si le formulaire a été submit et que le champ nom est rempli
+            if(isset($_POST["submit"])){
 
-            $idCategorie = $categorieManager->add($data);
+                if($nom != ""){
 
-            $session->addFlash("success","Catégorie ajoutée");
+                    $data = [
+                        "nom" => str_replace("'","\'",$nom)
+                    ];
+        
+                    $idCategorie = $categorieManager->add($data);
+        
+                    $session->addFlash("success","Catégorie ajoutée");
+        
+                    $this->redirectTo("topic","listTopicsByCategory",$idCategorie);
 
-            $this->redirectTo("topic","listTopicsByCategory",$idCategorie);
+                }  else {
+    
+                    $session->addFlash("error","Veuillez saisir un nom de catégorie!");
+        
+                    $this->redirectTo("categorie","ajouterCategorie");
+        
+                }   
+            }
 
+        // Si l'utilisateur n'est pas admin
         } else {
 
-            $session->addFlash("error","Veuillez saisir un nom de catégorie!");
-
-            $this->redirectTo("categorie","ajouterCategorieAffichage");
+            $session->addFlash("error","Vous n'avez pas les autorisations nécessaires pour effectuer cette action!");
+    
+            $this->redirectTo("categorie","index");
 
         }
+
+        return [
+            "view" => VIEW_DIR."ajout/ajoutCategorie.php",
+            "meta_description" => "Ajout de catégorie",
+            "data" => [
+            
+            ]
+        ];
+
+        
     }
 
     public function modifierCategorie($id) {

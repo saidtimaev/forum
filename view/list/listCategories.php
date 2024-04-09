@@ -24,7 +24,7 @@ foreach($categories as $categorie ){ ?>
 <?php } ?>
 
 <?php if(App\Session::isAdmin()){ ?>
-    <a href="index.php?ctrl=categorie&action=ajouterCategorieAffichage&id="<?=$categorie->getId()?>>Nouvelle catégorie</a>    
+    <a href="index.php?ctrl=categorie&action=ajouterCategorie"<?=$categorie->getId()?>>Nouvelle catégorie</a>    
 <?php } ?>
 
   
