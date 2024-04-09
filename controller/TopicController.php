@@ -97,7 +97,7 @@ class TopicController extends AbstractController implements ControllerInterface{
         }
 
     }
-
+    // Modification topic
     public function modifierTopic($id) {
 
         $topicManager = new TopicManager();
@@ -107,10 +107,11 @@ class TopicController extends AbstractController implements ControllerInterface{
 
         $topic = $topicManager->findOneById($id);
 
+        // Si un utilisateur est en session
         if(Session::getUser()){
-
-            if(Session::isAdmin() || Session::getUser()->getId() == $topic->getUser()->getId()){
-
+            // Si l'utilisateur est un admin ou l'auteur du topic
+            if(Session::isAdmin() || Session::getUser()->getId() == $topic->getUtilisateur()->getId()){
+                // Si le formulaire a été submit et que le champ titre est rempli
                 if(isset($_POST["submit"]) && ($titre != "")) {
     
                     $data = [
@@ -126,7 +127,7 @@ class TopicController extends AbstractController implements ControllerInterface{
                 } 
         
                 
-    
+            // Si c'est un visiteur ou un utilisateur qui n'est pas auteur du topic
             } else {
     
                 $session->addFlash("error","Vous n'avez pas les autorisations nécessaires pour effectuer cette action!");
@@ -142,28 +143,37 @@ class TopicController extends AbstractController implements ControllerInterface{
                 "topic"=>$topic
                 ]
             ];
-
         }
-        
-       
-        
     }
 
+    //Supprimer un topic
     public function supprimerTopic($id) {
 
         
         $topicManager = new TopicManager();
         $session = new Session();
 
-        $topic = $topicManager->findOneById($id)->getCategorie()->getId();
-
-        // var_dump($post);die;
         
-        $topicManager->delete($id);
+        // Si l'utilisateur est un admin
+        if(Session::isAdmin()){
+            
+            $topic = $topicManager->findOneById($id)->getCategorie()->getId();
 
-        $session->addFlash("success","Topic supprimé avec succès!");
+            $topicManager->delete($id);
 
-        $this->redirectTo("topic","listTopicsByCategory",$topic);
+            $session->addFlash("success","Topic supprimé avec succès!");
+
+            $this->redirectTo("topic","listTopicsByCategory",$topic);
+
+        // Si l'utilisateur n'est pas un admin
+        } else {
+
+            $session->addFlash("error","Vous n'avez pas les autorisations nécessaires pour effectuer cette action!");
+    
+            $this->redirectTo("categorie","index");
+
+        }
+        
     }
 
     public function verrouillerTopic($id){
@@ -175,31 +185,41 @@ class TopicController extends AbstractController implements ControllerInterface{
         $topic = $topicManager->findOneById($id);
         $idCategorie = $topicManager->findOneById($id)->getCategorie()->getId();
 
-
-        if($topic->getVerrouillage() == 0){
-
-            $data = [
-                "verrouillage" => "1"
-            ];
+        // Si l'utilisateur est un admin
+        if(Session::isAdmin()){
+            // Si le topic n'est pas verrouillé
+            if($topic->getVerrouillage() == 0){
+                // On le verrouille
+                $data = [
+                    "verrouillage" => "1"
+                ];
+        
+                $topicManager->update($data,$id);
+        
+                $session->addFlash("success","Topic verrouillé!");
     
-            $topicManager->update($data,$id);
+            // S'il est verrouillé
+            } else {
+                // On le déverrouille
+                $data = [
+                    "verrouillage" => "0"
+                ];
+        
+                $topicManager->update($data,$id);
+        
+                $session->addFlash("success","Topic deverrouillé!");
     
-            $session->addFlash("success","Topic verrouillé!");
+            }
+    
+            $this->redirectTo("topic","listTopicsByCategory",$idCategorie);
 
+        // Si l'utilisateur n'est pas un admin
         } else {
 
-            $data = [
-                "verrouillage" => "0"
-            ];
+            $session->addFlash("error","Vous n'avez pas les autorisations nécessaires pour effectuer cette action!");
     
-            $topicManager->update($data,$id);
-    
-            $session->addFlash("success","Topic deverrouillé!");
+            $this->redirectTo("categorie","index");
 
         }
-
-        $this->redirectTo("topic","listTopicsByCategory",$idCategorie);
-        
-
     }
 }
