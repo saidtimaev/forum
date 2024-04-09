@@ -32,7 +32,7 @@ class PostController extends AbstractController implements ControllerInterface{
         ];
     }
 
-    
+    // Ajouter un post
     public function ajouterPost() {
 
         $postManager = new PostManager();

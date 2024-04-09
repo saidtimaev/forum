@@ -64,7 +64,7 @@ final class Post extends Entity{
      */ 
     public function getUtilisateur()
     {
-        return $this->utilisateur ? $this->utilisateur : "Invité";
+        return $this->utilisateur ? $this->utilisateur : "Anonyme";
     }
 
     /**
