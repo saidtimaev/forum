@@ -25,7 +25,7 @@ class CategorieController extends AbstractController implements ControllerInterf
         ];
     }
 
-    public function ajouterCategorie() {
+    public function ajouterCategorie(){
 
         $categorieManager = new CategorieManager();
         $session = new Session();

@@ -8,10 +8,12 @@
 
 <?php
 foreach($posts as $post ){ ?>
+
     <p>"<?= $post ?>" par <a href="#"><?= $post->getUtilisateur()?></a> le <?= $post->getDateCreation() ?> 
-    <!-- Si l'utilisateur est un ADMIN ou que c'est le l'auteur du post et qu'il n'est pas ban -->
-    <?php if(App\Session::getUser() && $post->getUtilisateur() && App\Session::getUser()->isBanned()==0 && App\Session::getUser()->getId()== $post->getUtilisateur()->getId() || App\Session::isAdmin()){?><a href="index.php?ctrl=post&action=modifierPost&id=<?=$post->getId()?>">Modifier</a> </p><?php } ?>
-    
+   
+    <!-- Si un utilisateur est connecté, qu'il n'est pas ban et que l'utilisateur qui a crée le post n'est pas "anonyme" ou que c'est un admin -->
+    <?php if(App\Session::getUser() && App\Session::getUser()->isBanned()==0  && $post->getUtilisateur() !== "Anonyme" || App\Session::isAdmin()){?><a href="index.php?ctrl=post&action=modifierPost&id=<?=$post->getId()?>">Modifier</a> </p><?php } ?>
+   
 <?php } ?>
 
 <!-- Si un utilisateur est connecté -->
