@@ -18,7 +18,7 @@ class HomeController extends AbstractController implements ControllerInterface {
         
     public function users(){
 
-        // var_dump('test');die;
+        // Restreint l'affichage de la vue au role admin
         $this->restrictTo("ROLE_ADMIN");
 
         $manager = new UtilisateurManager();
@@ -45,6 +45,7 @@ class HomeController extends AbstractController implements ControllerInterface {
 
         // var_dump(iterator_to_array($posts));die;
 
+        // Si c'est un admin il peut accéder à la vue
         if(Session::isAdmin()){
 
             return [
