@@ -19,6 +19,7 @@ session_start();
 //et on intègre la classe Session qui prend la main sur les messages en session
 use App\Session as Session;
 
+// Filtrage des données que l'on recoit par la méthode GET
 $idFiltre = isset($_GET['id']) ? filter_var($_GET['id'], FILTER_SANITIZE_FULL_SPECIAL_CHARS) : null;
 $actionFiltre = isset($_GET['action']) ? filter_var($_GET['action'], FILTER_SANITIZE_FULL_SPECIAL_CHARS) : null;
 $ctrlFiltre = isset($_GET['ctrl']) ? filter_var($_GET['ctrl'], FILTER_SANITIZE_FULL_SPECIAL_CHARS) : null;
@@ -26,11 +27,15 @@ $ctrlFiltre = isset($_GET['ctrl']) ? filter_var($_GET['ctrl'], FILTER_SANITIZE_F
 //---------REQUETE HTTP INTERCEPTEE-----------
 $ctrlname = DEFAULT_CTRL;//on prend le controller par défaut
 //ex : index.php?ctrl=home
+
+// Si la clé 'ctrl' contient une valeur
 if(isset($_GET['ctrl'])){
+    //le nom du controlleur est celui qu'on a envoyé par la méthode GET
     $ctrlname = $ctrlFiltre;
 }
 //on construit le namespace de la classe Controller à appeller
 $ctrlNS = "controller\\".ucfirst($ctrlname)."Controller";
+
 //on vérifie que le namespace pointe vers une classe qui existe
 if(!class_exists($ctrlNS)){
     //si c'est pas le cas, on choisit le namespace du controller par défaut
@@ -44,12 +49,14 @@ if(isset($_GET['action']) && method_exists($ctrl, $_GET['action'])){
     //la méthode à appeller sera celle de l'url
     $action = $actionFiltre;
 }
+// Si un $id est passé par l'URL
 if(isset($_GET['id'])){
     $id = $idFiltre;
 }
 else $id = null;
 //ex : HomeController->users(null)
 $result = $ctrl->$action($id);
+var_dump($result);die;
 
 /*--------CHARGEMENT PAGE--------*/
 if($action == "ajax"){ //si l'action était ajax

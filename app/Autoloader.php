@@ -36,7 +36,7 @@ class Autoloader{
 		//$file = CategorieController.php
 
 		$filepath = BASE_DIR.$path.DS.$file;
-		var_dump($filepath);
+		
 		//$filepath = model/managers/TopicManager.php
 		//$filepath = controller/CategorieController.php
 		if(file_exists($filepath)){
